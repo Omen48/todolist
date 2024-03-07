@@ -10,8 +10,7 @@ class GroupWidgetModel {
       Hive.registerAdapter(GroupAdapter());
     }
     final box = await Hive.openBox<Group>('group_box');
-    final group = Group(name: groupName);
-    await box.add(group);
+    await box.add(Group(name: groupName));
   }
 }
 

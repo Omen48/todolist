@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todolist/widgets/example/example.dart';
+import 'package:todolist/widgets/tasks/tasks.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -8,6 +9,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      routes: {
+        '/tasks': (BuildContext context) => const TasksWidget(),
+      },
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(

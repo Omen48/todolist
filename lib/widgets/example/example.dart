@@ -27,7 +27,7 @@ class GroupsBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-      return Scaffold(
+    return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: const Text('Группы'),
@@ -48,7 +48,7 @@ class GroupList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-   final groupCount = ExampleModelProvider.watch(context).model.groups.length;
+    final groupCount = ExampleModelProvider.watch(context).model.groups.length;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15.0),
       child: ListView.separated(
@@ -67,22 +67,16 @@ class RowOfGroup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final groupname = ExampleModelProvider.read(context)!.model.groups[indexGroup];
+    final groupname =
+        ExampleModelProvider.read(context)!.model.groups[indexGroup];
     return Slidable(
       endActionPane: ActionPane(
         motion: const StretchMotion(),
         children: [
           SlidableAction(
-            // An action can be bigger than the others.
-            flex: 1,
-            onPressed: (context) => () {},
-            backgroundColor: Color(0xFF7BC043),
-            foregroundColor: Colors.white,
-            icon: Icons.archive,
-            label: 'Archive',
-          ),
-          SlidableAction(
-            onPressed: (context) => ExampleModelProvider.read(context)!.model.deleteGroup(indexGroup),
+            onPressed: (context) => ExampleModelProvider.read(context)!
+                .model
+                .deleteGroup(indexGroup),
             backgroundColor: Colors.red,
             foregroundColor: Colors.white,
             icon: Icons.delete,
@@ -90,9 +84,12 @@ class RowOfGroup extends StatelessWidget {
           ),
         ],
       ),
-      child:  ListTile(
+      child: ListTile(
         title: Text(groupname.name),
         trailing: Icon(Icons.chevron_right),
+        onTap: () => ExampleModelProvider.read(context)!
+            .model
+            .showTasks(context, indexGroup),
       ),
     );
   }

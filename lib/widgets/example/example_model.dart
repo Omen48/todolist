@@ -16,6 +16,16 @@ class ExampleModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void showTasks(BuildContext context, int groupIndex) async {
+    if (!Hive.isAdapterRegistered(0)) {
+      Hive.registerAdapter(GroupAdapter());
+    }
+    final box = await Hive.openBox<Group>('group_box');
+
+    final groupsNum = box.keyAt(groupIndex) as int;
+    Navigator.of(context).pushNamed('/tasks', arguments: groupsNum);
+  }
+
   void deleteGroup(int groupIndex) async {
     if (!Hive.isAdapterRegistered(0)) {
       Hive.registerAdapter(GroupAdapter());
