@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:todolist/widgets/groupform/groupFrom.dart';
 
 class Examp extends StatelessWidget {
   const Examp({super.key});
@@ -14,33 +15,7 @@ class Examp extends StatelessWidget {
       body: const SafeArea(child: GroupList()),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          showDialog(
-            context: context,
-            builder: (_) => AlertDialog.adaptive(
-              actionsAlignment: MainAxisAlignment.center,
-              actions: [
-                ElevatedButton(
-                  onPressed: () {},
-                  child: Text('Добавить новую группу'),
-                ),
-                ElevatedButton(
-                  onPressed: () {},
-                  child: Text('Отмена'),
-                ),
-              ],
-              elevation: 24.0,
-              content: const TextField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(20.0),
-                    ),
-                  ),
-                ),
-              ),
-              title: const Text('Добавить новую группу'),
-            ),
-          );
+          showDialog(context: context, builder: (_) => GroupForm());
         },
         child: const Icon(Icons.add),
       ),
