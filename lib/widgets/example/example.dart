@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 class Examp extends StatelessWidget {
   const Examp({super.key});
@@ -8,12 +9,40 @@ class Examp extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('Группы'),
+        title: const Text('Группы'),
       ),
-      body: SafeArea(child: GroupList()),
+      body: const SafeArea(child: GroupList()),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: Icon(Icons.add),
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (_) => AlertDialog.adaptive(
+              actionsAlignment: MainAxisAlignment.center,
+              actions: [
+                ElevatedButton(
+                  onPressed: () {},
+                  child: Text('Добавить новую группу'),
+                ),
+                ElevatedButton(
+                  onPressed: () {},
+                  child: Text('Отмена'),
+                ),
+              ],
+              elevation: 24.0,
+              content: const TextField(
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(20.0),
+                    ),
+                  ),
+                ),
+              ),
+              title: const Text('Добавить новую группу'),
+            ),
+          );
+        },
+        child: const Icon(Icons.add),
       ),
     );
   }
@@ -47,9 +76,32 @@ class RowOfGroup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const ListTile(
-      title: Text('data'),
-      trailing: Icon(Icons.chevron_right),
+    return Slidable(
+      endActionPane: ActionPane(
+        motion: const StretchMotion(),
+        children: [
+          SlidableAction(
+            // An action can be bigger than the others.
+            flex: 1,
+            onPressed: (context) => () {},
+            backgroundColor: Color(0xFF7BC043),
+            foregroundColor: Colors.white,
+            icon: Icons.archive,
+            label: 'Archive',
+          ),
+          SlidableAction(
+            onPressed: (context) => () {},
+            backgroundColor: Colors.red,
+            foregroundColor: Colors.white,
+            icon: Icons.delete,
+            label: 'Delete',
+          ),
+        ],
+      ),
+      child: const ListTile(
+        title: Text('data'),
+        trailing: Icon(Icons.chevron_right),
+      ),
     );
   }
 }
