@@ -1,38 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:todolist/widgets/task_form/tasks_form_widget_model.dart';
 
-//
-// class TasksFormWidget extends StatelessWidget {
-//   const TasksFormWidget({super.key});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return const Placeholder();
-//   }
-// }
-
 class TaskFormWidget extends StatefulWidget {
-  const TaskFormWidget({super.key});
+  final int groupKey;
+
+  const TaskFormWidget({super.key, required this.groupKey});
 
   @override
   State<TaskFormWidget> createState() => _TaskFormWidgetState();
 }
 
 class _TaskFormWidgetState extends State<TaskFormWidget> {
-  TaskFormWidgetModel? _model;
+  late final TaskFormWidgetModel _model;
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (_model == null) {
-      final args = ModalRoute.of(context)!.settings.arguments as int;
-      _model = TaskFormWidgetModel(groupKey: args);
-    }
+  void initState() {
+    _model = TaskFormWidgetModel(groupKey: widget.groupKey);
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return TaskFormWidgetModelProvider(model: _model!, child: const TaskForm());
+    return TaskFormWidgetModelProvider(model: _model, child: const TaskForm());
   }
 }
 

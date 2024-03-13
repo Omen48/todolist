@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:todolist/internal/main_navigation/main_navigator.dart';
 import 'package:todolist/widgets/example/example.dart';
-import 'package:todolist/widgets/tasks/tasks.dart';
 
 class MyApp extends StatelessWidget {
+  static final navigation = MainNavigation();
+
   const MyApp({super.key});
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      routes: {
-        '/tasks': (BuildContext context) => const TasksWidget(),
-      },
+      routes: navigation.routes,
+      initialRoute: navigation.initialroute,
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      onGenerateRoute: navigation.onGenerateRoute,
       theme: ThemeData(
         appBarTheme: AppBarTheme(color: Colors.grey),
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),

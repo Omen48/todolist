@@ -1,64 +1,55 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:todolist/domain/box_manager/box_manager.dart';
 import 'package:todolist/domain/entity/Task.dart';
-
-import '../../domain/entity/group.dart';
+import 'package:todolist/widgets/tasks/tasks.dart';
 
 class TaskWidgetModel extends ChangeNotifier {
-  int groupKey;
-  late final Future<Box<Group>> _groupBox;
-  Group? _group;
+   TaskWidgetConfig configuration;
+   ValueListenable<Object>? _listener;
 
-  Group? get group => _group;
+   late final Future<Box<Task>> _box;
+
   var _tasks = <Task>[];
 
   List<Task> get tasks => _tasks.toList();
 
-  TaskWidgetModel({required this.groupKey}) {
+  TaskWidgetModel({required this.configuration}) {
     _setup();
   }
 
-  void _readTask() {
-    _tasks = _group?.tasks ?? <Task>[];
-    notifyListeners();
+  Future<void> deleteTask(int taskIndex) async {
+    (await _box).deleteAt(taskIndex);
   }
 
-  void _loadGroup() async {
-    final box = await _groupBox;
-    _group = box.get(groupKey);
-    notifyListeners();
-  }
-
-  void _setupListenableBox() async {
-    final box = await _groupBox;
-    _readTask();
-    box.listenable(keys: [groupKey]).addListener(_readTask);
-  }
-
-  void deleteTask(int groupIndex) {
-    _group?.tasks?.deleteFromHive(groupIndex);
-    _group?.save();
-  }
-
-  void switchToggle(int groupIndex) async {
-    final task = _group?.tasks?[groupIndex];
-    final currentState = task?.isDone ?? false;
-    task?.isDone = !currentState;
+  void switchToggle(int taskIndex) async {
+    final task = (await _box).getAt(taskIndex);
+    task?.isDone = !task.isDone;
     await task?.save();
+    // notifyListeners();
+  }
+
+  Future<void> _readTaskFromHive() async {
+    _tasks = (await _box).values.toList();
     notifyListeners();
   }
 
-  void _setup() {
-    if (!Hive.isAdapterRegistered(0)) {
-      Hive.registerAdapter(GroupAdapter());
-    }
-    _groupBox = Hive.openBox<Group>('group_box');
-    if (!Hive.isAdapterRegistered(1)) {
-      Hive.registerAdapter(TaskAdapter());
-    }
-    _loadGroup();
-    _setupListenableBox();
+  Future<void> _setup() async {
+    _box = BoxManager.instanse.openTaskBox(configuration.groupKey);
+
+    await _readTaskFromHive();
+    _listener =(await _box).listenable();
+    _listener?.addListener(_readTaskFromHive);
   }
+
+  @override
+  Future<void> dispose() async {
+    _listener?.removeListener(_readTaskFromHive);
+    await BoxManager.instanse.closeBox((await _box));
+        super.dispose();
+  }
+
 }
 
 class TaskWidgetModelProvider extends InheritedNotifier {

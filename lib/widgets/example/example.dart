@@ -20,6 +20,12 @@ class _ExampState extends State<Examp> {
       child: GroupsBody(),
     );
   }
+
+  @override
+  void dispose() {
+    _model.dispose();
+    super.dispose();
+  }
 }
 
 class GroupsBody extends StatelessWidget {

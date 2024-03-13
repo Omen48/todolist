@@ -3,36 +3,43 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:todolist/widgets/task_form/tasks_form_widget.dart';
 import 'package:todolist/widgets/tasks/tasks_model.dart';
 
+class TaskWidgetConfig {
+  final String title;
+  final int groupKey;
+
+  TaskWidgetConfig(this.title, this.groupKey);
+}
+
 class TasksWidget extends StatefulWidget {
-  const TasksWidget({super.key});
+  final TaskWidgetConfig configuration;
+
+  const TasksWidget({super.key, required this.configuration});
 
   @override
   State<TasksWidget> createState() => _TasksWidgetState();
 }
 
 class _TasksWidgetState extends State<TasksWidget> {
-  TaskWidgetModel? _model;
+  late final TaskWidgetModel _model;
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (_model == null) {
-      final args = ModalRoute.of(context)!.settings.arguments as int;
-      _model = TaskWidgetModel(groupKey: args);
-    }
+  void initState() {
+    super.initState();
+    _model = TaskWidgetModel(configuration: widget.configuration);
   }
 
   @override
   Widget build(BuildContext context) {
-    final model = _model;
-    if (model != null) {
-      return TaskWidgetModelProvider(
-        model: model,
-        child: const TaskBodyWidget(),
-      );
-    } else {
-      return const Center(child: CircularProgressIndicator());
-    }
+    return TaskWidgetModelProvider(
+      model: _model,
+      child: const TaskBodyWidget(),
+    );
+  }
+
+  @override
+  void dispose() {
+      _model.dispose();
+    super.dispose();
   }
 }
 
@@ -42,24 +49,21 @@ class TaskBodyWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final model = TaskWidgetModelProvider.watch(context).model;
-    final title = model.group?.name ?? 'Задачи';
-    return Scaffold(
+     return Scaffold(
       body: const Center(
         child: TasksList(),
       ),
       floatingActionButton: ElevatedButton(
           onPressed: () => showDialog(
-                routeSettings: RouteSettings(
-                    name: 'Передача groupKey',
-                    arguments:
-                        ModalRoute.of(context)!.settings.arguments as int),
                 context: context,
-                builder: (context) => const TaskFormWidget(),
+                builder: (context) => TaskFormWidget(
+                  groupKey: model.configuration.groupKey,
+                ),
               ),
           child: const Icon(Icons.add)),
       appBar: AppBar(
         centerTitle: true,
-        title: Text(title),
+        title: Text(model.configuration.title),
       ),
     );
   }
