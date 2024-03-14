@@ -8,7 +8,7 @@ class GroupWidgetModel {
   void saveGroup(BuildContext context) async {
     final box = await BoxManager.instanse.openGroupBox();
     await box.add(Group(name: groupName));
-    // await BoxManager.instanse.closeBox(box);
+    await BoxManager.instanse.closeBox(box);
 
   }
 }
