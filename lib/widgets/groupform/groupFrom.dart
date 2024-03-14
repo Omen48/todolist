@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todolist/widgets/groupform/groupModel.dart';
 
-
 class GroupWidget extends StatefulWidget {
   const GroupWidget({super.key});
 
@@ -11,13 +10,12 @@ class GroupWidget extends StatefulWidget {
 
 class _GroupWidgetState extends State<GroupWidget> {
   final _model = GroupWidgetModel();
+
   @override
   Widget build(BuildContext context) {
-    return GroupWidgetModelProvider(model: _model,
-    child: const GroupForm());
+    return GroupWidgetModelProvider(model: _model, child: const GroupForm());
   }
 }
-
 
 class GroupForm extends StatelessWidget {
   const GroupForm({super.key});
@@ -40,14 +38,16 @@ class GroupForm extends StatelessWidget {
         ),
       ],
       elevation: 24.0,
-      content:  TextField(
+      content: TextField(
         autofocus: true,
         onEditingComplete: () {
           GroupWidgetModelProvider.read(context)?.model.saveGroup(context);
           Navigator.of(context).pop();
         },
-        onChanged:(value) => GroupWidgetModelProvider.read(context)?.model.groupName = value,
-        decoration: const InputDecoration(
+        onChanged: (value) =>
+            GroupWidgetModelProvider.watch(context).model.groupName = value,
+        decoration: InputDecoration(
+          errorText: GroupWidgetModelProvider.watch(context).model.errorText,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.all(
               Radius.circular(20.0),
