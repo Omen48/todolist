@@ -41,3 +41,30 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# C++ related
+*.cpp
+*.hpp
+*.h
+*.cxx
+*.hxx
+
+# CMake related
+CMakeLists.txt
+CMakeCache.txt
+*.cmake
+
+# Swift related
+*.swift
+
+# HTML related
+*.html
+
+# C related
+*.c
+
+# Other
+*.md
+*.json
+*.yml
+*.xml
