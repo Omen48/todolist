@@ -1,6 +1,6 @@
 # todolist
 
-A new Flutter project.
+Simple ToDo List based on Hive DB
 
 ## Getting Started
 
